@@ -9,7 +9,7 @@
 
 body {
     height: 100vh;
-    background-image: url("../img/bg.jpg");
+    background-image: url("../img/bg-desktop2.jpg");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -182,6 +182,7 @@ input, select {
         display: flex;
         justify-content: center;
         align-items: center;
+        background-image: url("../img/bg-mobile2.jpg");
         background-position: top;
         background-size: cover;
     }
