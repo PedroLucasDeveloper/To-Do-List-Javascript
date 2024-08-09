@@ -19,8 +19,8 @@ body {
 
 button {
     background-color: #FDFDFD;
-    color: #102f5e;
-    border: 2px solid #102f5e;
+    color: #113270;
+    border: 2px solid #113270;
     padding: .3rem .6rem;
     font-size: 1rem;
     cursor: pointer;
@@ -52,7 +52,7 @@ button:hover > i {
 }
 
 button i {
-    color: #102f5e;
+    color: #113270;
     font-weight: bold;
     pointer-events: none;
 }
@@ -165,7 +165,7 @@ input, select {
 }
 
 .done {
-    background-color: #395169;
+    background-color: #113270;
 }
 
 .done h3 {
@@ -179,6 +179,9 @@ input, select {
 /* Ajustes adicionais para telas menores que 480px (smartphones) */
 @media (max-width: 480px) {
     body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-position: top;
         background-size: cover;
     }

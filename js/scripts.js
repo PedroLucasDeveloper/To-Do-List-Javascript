@@ -1,41 +1,40 @@
 // Seleção de elementos
 const todoForm = document.querySelector("#todo-form");
-const todoInput= document.querySelector("#todo-input");
+const todoInput = document.querySelector("#todo-input");
 const todoList = document.querySelector("#todo-list");
 const editForm = document.querySelector("#edit-form");
 const editInput = document.querySelector("#edit-input");
 const cancelEditBtn = document.querySelector("#cancel-edit-btn");
 const searchInput = document.querySelector("#search-input");
-const filterSelect = document.querySelector("#filter-select"); 
+const filterSelect = document.querySelector("#filter-select");
 
 let oldInputValue;
 
-//Funções
+// Funções
 const saveTodo = (text) => {
+    const todo = document.createElement("div");
+    todo.classList.add("todo");
 
-    const todo = document.createElement("div")
-    todo.classList.add("todo")
+    const todoTitle = document.createElement("h3");
+    todoTitle.innerText = text;
+    todo.appendChild(todoTitle);
 
-    const todoTitle = document.createElement("h3")
-    todoTitle.innerText = text
-    todo.appendChild(todoTitle)
+    const doneBtn = document.createElement("button");
+    doneBtn.classList.add("finish-todo");
+    doneBtn.innerHTML = '<i class="fa-solid fa-check"> </i>';
+    todo.appendChild(doneBtn);
 
-    const doneBtn = document.createElement("button")
-    doneBtn.classList.add("finish-todo")
-    doneBtn.innerHTML = '<i class="fa-solid fa-check"> </i>'
-    todo.appendChild(doneBtn)
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("edit-todo");
+    editBtn.innerHTML = '<i class="fa-solid fa-pen"> </i>';
+    todo.appendChild(editBtn);
 
-    const editBtn = document.createElement("button")
-    editBtn.classList.add("edit-todo")
-    editBtn.innerHTML = '<i class="fa-solid fa-pen"> </i>'
-    todo.appendChild(editBtn)
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("remove-todo");
+    deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"> </i>';
+    todo.appendChild(deleteBtn);
 
-    const deleteBtn = document.createElement("button")
-    deleteBtn.classList.add("remove-todo")
-    deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"> </i>'
-    todo.appendChild(deleteBtn)
-
-    todoList.appendChild(todo)
+    todoList.appendChild(todo);
 
     todoInput.value = "";
     todoInput.focus();
@@ -48,13 +47,12 @@ const toggleForms = () => {
 };
 
 const updateTodo = (text) => {
-    
     const todos = document.querySelectorAll(".todo");
 
     todos.forEach((todo) => {
         let todoTitle = todo.querySelector("h3");
 
-        if(todoTitle.innerText === oldInputValue){
+        if (todoTitle.innerText === oldInputValue) {
             todoTitle.innerText = text;
         }
     });
@@ -99,43 +97,40 @@ const searchTodos = (searchTerm) => {
     });
 };
 
-//Eventos
+// Eventos
 todoForm.addEventListener("submit", (e) => {
-
-    e.preventDefault()
+    e.preventDefault();
 
     const inputValue = todoInput.value;
 
-    if(inputValue){
-        saveTodo(inputValue)
+    if (inputValue) {
+        saveTodo(inputValue);
     }
 });
 
 document.addEventListener("click", (e) => {
-
     const targetEl = e.target;
     const parentEl = targetEl.closest("div");
     let todoTitle;
 
-    if(parentEl && parentEl.querySelector("h3")){
+    if (parentEl && parentEl.querySelector("h3")) {
         todoTitle = parentEl.querySelector("h3").innerText;
     }
 
-    if(targetEl.classList.contains("finish-todo")){
+    if (targetEl.classList.contains("finish-todo")) {
         parentEl.classList.toggle("done");
     }
-    
-    if(targetEl.classList.contains("remove-todo")){
+
+    if (targetEl.classList.contains("remove-todo")) {
         parentEl.remove();
     }
 
-    if(targetEl.classList.contains("edit-todo")){
+    if (targetEl.classList.contains("edit-todo")) {
         toggleForms();
 
         editInput.value = todoTitle;
         oldInputValue = todoTitle;
     }
-
 });
 
 cancelEditBtn.addEventListener("click", (e) => {
@@ -145,17 +140,15 @@ cancelEditBtn.addEventListener("click", (e) => {
 });
 
 editForm.addEventListener("submit", (e) => {
-
-    e.preventDefault()
+    e.preventDefault();
 
     const editInputValue = editInput.value;
 
-    if(editInputValue){
+    if (editInputValue) {
         updateTodo(editInputValue);
     }
 
     toggleForms();
-
 });
 
 searchInput.addEventListener("input", (e) => {
@@ -183,6 +176,17 @@ const desktopBackgrounds = [
     '../img/bg-desktop4.jpg'
 ];
 
+// Função para pré-carregar as imagens
+function preloadImages(images) {
+    images.forEach((image) => {
+        const img = new Image();
+        img.src = image;
+    });
+}
+
+// Pré-carregar todas as imagens
+preloadImages([...mobileBackgrounds, ...desktopBackgrounds]);
+
 // Função para escolher uma imagem aleatória do array fornecido
 function getRandomBackground(backgrounds) {
     const randomIndex = Math.floor(Math.random() * backgrounds.length);
@@ -202,7 +206,15 @@ function setBackgroundBasedOnScreenSize() {
 }
 
 // Chame a função ao carregar a página
-window.onload = setBackgroundBasedOnScreenSize;
+window.onload = () => {
+    // Definir um fundo temporário
+    document.body.style.background = 'linear-gradient(45deg, #f3ec78, #af4261)';
+    setBackgroundBasedOnScreenSize();
+};
 
-// Também atualize o fundo se a tela for redimensionada
-window.onresize = setBackgroundBasedOnScreenSize;
+// Adicionar debounce ao evento de redimensionamento
+let resizeTimeout;
+window.onresize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(setBackgroundBasedOnScreenSize, 300);
+};
